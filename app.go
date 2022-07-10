@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"github.com/google/uuid"
@@ -16,7 +15,6 @@ import (
 
 type App struct {
 	Router *mux.Router
-	DB     *sql.DB
 }
 
 func (app *App) Initialize(dbConfig db.Config) {
