@@ -16,12 +16,13 @@ type Customer struct {
 }
 
 type CustomerNotificationChannels struct {
-	ID                           int32 `gorm:"primarykey"`
+	ID                           int32 `gorm:"AUTO_INCREMENT;primarykey"`
 	CustomerID                   string
 	Customer                     Customer
 	NotificationChannelTypeID    string
 	NotificationChannelType      NotificationChannel
 	NotificationChannelLookupKey string
+	ContactCustomer              bool
 }
 
 type Notification struct {
