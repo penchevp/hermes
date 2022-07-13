@@ -256,6 +256,20 @@ func (app *App) deleteCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if dbResult := dbConn.Where("customer_id = ?", customerID.String()).Delete(&db.CustomerNotificationChannels{}); dbResult.Error != nil {
+		if errors.Is(dbResult.Error, gorm.ErrRecordNotFound) {
+			jsonResponse(w, http.StatusNotFound, struct{}{})
+			return
+		}
+
+		log.Err(dbResult.Error).
+			Str("requestIdentifier", r.Context().Value("requestIdentifier").(string)).
+			Msg("Error when deleting from database")
+
+		errorResponse(w, http.StatusInternalServerError, "Error occurred")
+		return
+	}
+
 	if dbResult := dbConn.Where("ID = ?", customerID.String()).Delete(&db.Customer{}); dbResult.Error != nil {
 		if errors.Is(dbResult.Error, gorm.ErrRecordNotFound) {
 			jsonResponse(w, http.StatusNotFound, struct{}{})
